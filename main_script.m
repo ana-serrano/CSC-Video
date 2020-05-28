@@ -2,7 +2,8 @@ clear all
 close all
 
 %Download trained filters for reconstruction****
-outfilename = websave('filters_ourVideos_obj2.45e+04filters_ourVideos_obj2.45e+04','https://www.dropbox.com/s/djtgw9ojxwtxj36/filters_ourVideos_obj2.45e%2B04.mat?dl=0');
+disp ('Downloading trained filters for reaconstruction, please wait...');
+outfilename = websave('filters_ourVideos_obj2.45e+04.mat','https://www.dropbox.com/s/djtgw9ojxwtxj36/filters_ourVideos_obj2.45e%2B04.mat?raw=1');
 
 %% Debug options
 verbose = 'all';
@@ -28,7 +29,7 @@ for i = 1:length(videoList)
     Mf = size(video,1);
     Nf = size(video,2);
     sampling3D = create_mask(Mf, Nf, T, psize,bump_size);
-    outputfolder = strcat('results_20200310/',videoList(i).name(1:end-4));
+    outputfolder = strcat('results/',videoList(i).name(1:end-4));
     mkdir( outputfolder );
  
     close all
@@ -39,7 +40,7 @@ for i = 1:length(videoList)
         coded_video = coded_video + (video(:,:,j).*sampling3D(:,:,j));
     end
      coded_video_norm = (coded_video - min(coded_video(:))) / (max(coded_video(:))  - min(coded_video(:)));
-     imwrite(coded_video_norm,strcat('results_20200310/',sprintf('%s_coded_bsize_%1d_T_%02d',videoList(i).name(1:end-4),bump_size,T),'.png'));
+     imwrite(coded_video_norm,strcat('results/',sprintf('%s_coded_bsize_%1d_T_%02d',videoList(i).name(1:end-4),bump_size,T),'.png'));
 	
 	%%RECONSTRUCTION
     for j=1:T-1
@@ -103,7 +104,7 @@ disp('Reconstruction done! Now merging reconstructed frames into video')
 clear all
 close all
 
-d = dir('results_20200310');
+d = dir('results');
 isub = [d(:).isdir]; 
 aux = ~strcmp(struct2cell(d),'.') & ~strcmp(struct2cell(d),'..');
 isub = isub & aux(1,:);
@@ -111,9 +112,9 @@ folders = {d(isub).name}';
 
 for k=1:length(folders)
     fpath = strcat(folders{k},'/');
-    list = dir(strcat('results_20200310/',fpath,'*.mat'));
+    list = dir(strcat('results/',fpath,'*.mat'));
 
-    load(strcat('results_20200310/',fpath,list(1).name));
+    load(strcat('results/',fpath,list(1).name));
     M = size(sig_rec_ours,1);
     N = size(sig_rec_ours,2)/2;
     T = length(list);
@@ -123,12 +124,12 @@ for k=1:length(folders)
     video(:,:,1) = imgs(:,:,1);
     video(:,:,2) = imgs(:,:,2);
     for i=2:length(list)
-        load(strcat('results_20200310/',fpath,list(i).name));
+        load(strcat('results/',fpath,list(i).name));
         imgs = reshape(sig_rec_ours, M, N, []);
         video(:,:,i) = (video(:,:,i) + imgs(:,:,1)) / 2;
         video(:,:,i+1) = imgs(:,:,2);
     end
-    save(strcat('results_20200310/',folders{k},'_raw_video.mat'),'video')
+    save(strcat('results/',folders{k},'_raw_video.mat'),'video')
     video = (video - min(video(:))) / (max(video(:)) - min(video(:)));
     v = VideoWriter(strcat('results_20200310/',folders{k},'_recon_video.mp4'),'MPEG-4');
     v.Quality = 100;
@@ -140,7 +141,7 @@ for k=1:length(folders)
     end
     close(v);
     video = video.^(1/1.5);
-    v = VideoWriter(strcat('results_20200310/',folders{k},'_recon_video_gamma1.5.mp4'),'MPEG-4');
+    v = VideoWriter(strcat('results/',folders{k},'_recon_video_gamma1.5.mp4'),'MPEG-4');
     v.FrameRate = 10;
     v.Quality = 100;
     open(v);
