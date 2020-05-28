@@ -17,4 +17,4 @@ For running the reconstruction, please run the script *main_script.m*
 
 You can download an example video for running the reconstruction [here](https://www.dropbox.com/s/25jkl7v3snl6fch/CSC-Video_examples.rar?dl=0).
 
-The full High-speed video dataset (45 video sequences at 1000 fps, captured with a Photron SA2) can be found [https://www.dropbox.com/s/25jkl7v3snl6fch/CSC-Video_examples.rar?dl=0](https://drive.google.com/drive/u/1/folders/0B6OEXFkAawbNblJtWGdTSkRfUzg).
+The full High-speed video dataset (45 video sequences at 1000 fps, captured with a Photron SA2) can be found [here](https://drive.google.com/drive/u/1/folders/0B6OEXFkAawbNblJtWGdTSkRfUzg).
