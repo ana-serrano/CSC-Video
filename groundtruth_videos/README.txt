@@ -1,0 +1,1 @@
+Place here videos to be reconstructed. An example can be found here: https://www.dropbox.com/s/25jkl7v3snl6fch/CSC-Video_examples.rar?dl=0
